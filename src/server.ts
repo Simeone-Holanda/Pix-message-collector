@@ -13,6 +13,5 @@ app.use(helmet())
 app.use(express.json())
 app.use(routes)
 
-console.log(process.env.PORT)
 const port = process.env.PORT || 3005
 app.listen(port, () => console.log(`server running on port ${port}`))

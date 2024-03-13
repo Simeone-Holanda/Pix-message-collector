@@ -1,5 +1,8 @@
 import { Request, Response } from 'express'
-import { StoreMessageService } from '../../Service/PixMessageServices'
+import {
+  FindAllMessageServices,
+  StoreMessageService,
+} from '../../Service/PixMessageServices'
 
 export const StoreMessageController = async (
   request: Request,
@@ -10,4 +13,12 @@ export const StoreMessageController = async (
   return response
     .status(201)
     .json({ message: 'Mensagens PIX adicionadas com sucesso.' })
+}
+
+export const FindAllMessagesController = async (
+  request: Request,
+  response: Response,
+): Promise<Response> => {
+  const messages = await FindAllMessageServices()
+  return response.status(200).json(messages)
 }
