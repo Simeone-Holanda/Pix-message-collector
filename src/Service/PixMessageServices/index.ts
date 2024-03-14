@@ -3,7 +3,6 @@ import HttpError from '../../Errors/httpError'
 
 // Banco de dados em memória(Temporárel)
 const messages = []
-const interactionsId = []
 
 export const StoreMessageService = async (ispb: string, number: string) => {
   for (let index = 0; index < parseInt(number); index++) {
@@ -42,27 +41,7 @@ function generateRandomPerson(ispb?: string) {
   }
 }
 
-export function ConnectionStreamService(ispb: string, responseOne: boolean) {
-  const interationId = uuidv4().slice(0, 15)
-  // verificando é possível se conectar
-  if (interactionsId.length > 6)
-    throw new HttpError('The maximum flow limit has been exceeded. ', 429)
-  interactionsId.push(interationId)
-  if (responseOne) {
-    const message = messages.find((m) => m.recebedor.ispb === ispb && !m.sent)
-    UpdateMessage(message)
-    return { message, interationId }
-  } else {
-    const responseMessages = messages
-      .filter((m) => m.recebedor.ispb === ispb && !m.sent)
-      .slice(0, 10)
-    responseMessages.map((rm) => UpdateMessage(rm))
-    return {
-      messages: responseMessages,
-      interationId,
-    }
-  }
-}
+
 
 const UpdateMessage = (message) => {
   if (!message) return
