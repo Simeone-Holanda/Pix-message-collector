@@ -14,8 +14,7 @@ class ConnectionStreamController {
 
   execute(request: Request, response: Response): Response {
     try {
-      const { ispb } = request.params
-
+      const { ispb, interationId } = request.params
       let responseOne = false
       if (
         request.headers.accept &&
@@ -29,14 +28,19 @@ class ConnectionStreamController {
       ) {
         responseOne = true
       }
-      const responseMessage = this.connectionStreamService.execute(
-        ispb,
-        responseOne,
-      )
+      const responseMessage = interationId
+        ? this.connectionStreamService.executeDataCapture(
+            ispb,
+            responseOne,
+            interationId,
+          )
+        : this.connectionStreamService.executeConnection(ispb, responseOne)
+
       response.setHeader(
         'Pull-Next',
         `/api/pix/${ispb}/stream/${responseMessage?.interationId}`,
       )
+      console.log(response.getHeaders())
       if (!responseMessage?.message && !responseMessage?.messages?.length)
         return response.status(204).json({ message: 'No content' })
       else

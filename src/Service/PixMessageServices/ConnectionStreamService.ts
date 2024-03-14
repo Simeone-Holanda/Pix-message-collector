@@ -19,20 +19,26 @@ class ConnectionStreamService {
     this.interactionRepository = interactionRepository
   }
 
-  execute(ispb: string, responseOne: boolean) {
-    const interationId = uuidv4().slice(0, 15)
-    // verificando é possível se conectar
-    if (this.interactionRepository.count() > 6)
-      throw new HttpError('The maximum stream limit has been exceeded. ', 429)
+  checkInteraction(interactionId: string) {
+    const hasInteraction = this.interactionRepository.findOne(interactionId)
+    if (!hasInteraction) {
+      throw new HttpError('Interaction not found, check your connection', 404)
+    }
+  }
 
-    this.interactionRepository.save({
-      id: interationId,
-      ispb,
-    })
+  executeDataCapture(ispb: string, responseOne: boolean, interationId: string) {
+    if (interationId) {
+      this.checkInteraction(interationId)
+    }
     if (responseOne) {
-      // const message = messages.find((m) => m.recebedor.ispb === ispb && !m.sent)
       const message = this.pixMessageRepository.findOne(ispb)
-      if (!message) throw new HttpError('No content', 204)
+
+      if (!message) {
+        return {
+          message: null,
+          interationId,
+        }
+      }
       this.pixMessageRepository.update(message.id, { sent: true })
       return { message, interationId }
     } else {
@@ -41,7 +47,11 @@ class ConnectionStreamService {
         10,
         false,
       )
-      if (!responseMessages.length) throw new HttpError('No content', 204)
+      if (!responseMessages.length)
+        return {
+          messages: null,
+          interationId,
+        }
 
       responseMessages.map((rm) =>
         this.pixMessageRepository.update(rm.id, { sent: true }),
@@ -51,6 +61,19 @@ class ConnectionStreamService {
         interationId,
       }
     }
+  }
+
+  executeConnection(ispb: string, responseOne: boolean) {
+    const interationId = uuidv4().slice(0, 15)
+    // verificando é possível se conectar
+    if (this.interactionRepository.count() > 6)
+      throw new HttpError('The maximum stream limit has been exceeded. ', 429)
+
+    this.interactionRepository.save({
+      id: interationId,
+      ispb,
+    })
+    return this.executeDataCapture(ispb, responseOne, interationId)
   }
 }
 

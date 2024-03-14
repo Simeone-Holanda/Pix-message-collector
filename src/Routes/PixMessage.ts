@@ -20,5 +20,8 @@ routes.get('/messages', (req, res) => {
 routes.get('/api/pix/:ispb/stream/start', (req, res) =>
   connectionStreamController.execute(req, res),
 )
+routes.get('/api/pix/:ispb/stream/:interationId', (req, res) =>
+  connectionStreamController.execute(req, res),
+)
 
 export default routes

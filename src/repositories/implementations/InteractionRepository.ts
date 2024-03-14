@@ -10,6 +10,10 @@ class InteractionRepository implements IInteractionRepository {
   count(): number {
     return this.interaction.length
   }
+
+  findOne(interactionId: string): IInteraction {
+    return this.interaction.find((inte) => inte.id === interactionId)
+  }
 }
 
 const interactionRepositoryInstance = new InteractionRepository()
