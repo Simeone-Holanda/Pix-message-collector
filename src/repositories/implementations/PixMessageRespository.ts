@@ -9,8 +9,21 @@ export class PixMessageRepository implements IPixMessageRepository {
     this.pixMessages.push(pixMessage)
   }
 
-  findAll(ispbRecebedor: string, limit: number, sent?: boolean): IPixMessage[] {
-    if (sent != null) {
+  findAll(
+    ispbRecebedor?: string,
+    limit?: number,
+    sent?: boolean,
+  ): IPixMessage[] {
+    if (!ispbRecebedor && !limit && !sent) {
+      return this.pixMessages
+    } else if (ispbRecebedor && sent != null) {
+      return this.pixMessages
+        .filter(
+          (message) =>
+            message.recebedor.ispb === ispbRecebedor && !message.sent,
+        )
+        .slice(0, limit)
+    } else {
       return this.pixMessages
         .filter(
           (message) =>
@@ -18,11 +31,6 @@ export class PixMessageRepository implements IPixMessageRepository {
         )
         .slice(limit)
     }
-    return this.pixMessages
-      .filter(
-        (message) => message.recebedor.ispb === ispbRecebedor && !message.sent,
-      )
-      .slice(limit)
   }
 
   findOne(ispbRecebedor: string, sent?: boolean): IPixMessage {

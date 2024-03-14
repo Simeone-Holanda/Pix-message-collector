@@ -23,7 +23,7 @@ class ConnectionStreamService {
     const interationId = uuidv4().slice(0, 15)
     // verificando é possível se conectar
     if (this.interactionRepository.count() > 6)
-      throw new HttpError('The maximum flow limit has been exceeded. ', 429)
+      throw new HttpError('The maximum stream limit has been exceeded. ', 429)
 
     this.interactionRepository.save({
       id: interationId,
@@ -32,6 +32,7 @@ class ConnectionStreamService {
     if (responseOne) {
       // const message = messages.find((m) => m.recebedor.ispb === ispb && !m.sent)
       const message = this.pixMessageRepository.findOne(ispb)
+      if (!message) throw new HttpError('No content', 204)
       this.pixMessageRepository.update(message.id, { sent: true })
       return { message, interationId }
     } else {
@@ -40,6 +41,8 @@ class ConnectionStreamService {
         10,
         false,
       )
+      if (!responseMessages.length) throw new HttpError('No content', 204)
+
       responseMessages.map((rm) =>
         this.pixMessageRepository.update(rm.id, { sent: true }),
       )
