@@ -91,7 +91,6 @@ class ConnectionStreamController {
             responseOne ? responseMessage.message : responseMessage.messages,
           )
     } catch (error) {
-      console.log(error)
       if (error instanceof HttpError) {
         return response.status(error.statusCode).send({
           message: error.message,
