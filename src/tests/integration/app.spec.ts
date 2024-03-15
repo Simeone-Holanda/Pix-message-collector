@@ -40,4 +40,15 @@ describe('Server test', () => {
     expect(diffTime).toBeLessThanOrEqual(9000)
     nextRequestUrl = response.headers['pull-next']
   }, 10000)
+
+  it('should test creating pix messages', async () => {
+    const response = await request(app).post('/api/util/msgs/32074986/15')
+    expect(response.body).toStrictEqual({
+      message: 'Mensagens PIX adicionadas com sucesso.',
+    })
+    expect(response.statusCode).toBe(201)
+    const responseMessages = await request(app).get('/messages')
+    expect(responseMessages.statusCode).toBe(200)
+    expect(responseMessages.body.length).toEqual(15)
+  })
 })
