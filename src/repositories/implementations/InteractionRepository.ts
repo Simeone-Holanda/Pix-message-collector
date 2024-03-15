@@ -2,17 +2,23 @@ import IInteraction from '../../Models/InteractionModel'
 import IInteractionRepository from '../interfaces/IInteractionRepository'
 
 class InteractionRepository implements IInteractionRepository {
-  interaction: IInteraction[] = []
+  interactions: IInteraction[] = []
   save(interaction: IInteraction): void {
-    this.interaction.push(interaction)
+    this.interactions.push(interaction)
   }
 
   count(): number {
-    return this.interaction.length
+    return this.interactions.length
   }
 
   findOne(interactionId: string): IInteraction {
-    return this.interaction.find((inte) => inte.id === interactionId)
+    return this.interactions.find((inte) => inte.id === interactionId)
+  }
+
+  delete(interactionId: string): void {
+    this.interactions = this.interactions.filter(
+      (inte) => inte.id !== interactionId,
+    )
   }
 }
 
