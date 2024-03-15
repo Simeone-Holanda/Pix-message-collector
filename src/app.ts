@@ -4,7 +4,7 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 
 class App {
-  private app: Application
+  public app: Application
 
   constructor() {
     this.app = express()
