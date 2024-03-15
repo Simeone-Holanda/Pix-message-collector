@@ -3,8 +3,41 @@ import { App } from '../../app'
 
 describe('Server test', () => {
   const app = new App().app
+  let nextRequestUrl
   it('should test server running', async () => {
     const response = await request(app).get('/messages')
+    expect(response.statusCode).toEqual(200)
     expect(response.body).toStrictEqual([])
   })
+  it('should test the connection to a stream', async () => {
+    const startHourRequest = Date.now()
+    const response = await request(app)
+      .get('/api/pix/32074986/stream/start')
+      .set('Accept', 'application/json')
+    const entHourRequest = Date.now()
+    const diffTime = entHourRequest - startHourRequest // Calcula o tempo decorrido em milissegundos
+
+    expect(response.body).toStrictEqual({})
+    expect(response.statusCode).toBe(204)
+    expect(response.headers).toHaveProperty('pull-next')
+    expect(diffTime).toBeGreaterThanOrEqual(8000)
+    expect(diffTime).toBeLessThanOrEqual(9000)
+    nextRequestUrl = response.headers['pull-next']
+  }, 10000)
+  it('should test if the connection remains open', async () => {
+    expect(nextRequestUrl).toBeDefined()
+    const startHourRequest = Date.now()
+    const response = await request(app)
+      .get(nextRequestUrl)
+      .set('Accept', 'application/json')
+    const entHourRequest = Date.now()
+    const diffTime = entHourRequest - startHourRequest // Calcula o tempo decorrido em milissegundos
+
+    expect(response.body).toStrictEqual({})
+    expect(response.statusCode).toBe(204)
+    expect(response.headers).toHaveProperty('pull-next')
+    expect(diffTime).toBeGreaterThanOrEqual(8000)
+    expect(diffTime).toBeLessThanOrEqual(9000)
+    nextRequestUrl = response.headers['pull-next']
+  }, 10000)
 })
