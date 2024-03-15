@@ -1,4 +1,5 @@
 import HttpError from '../../Errors/httpError'
+import IPixMessage from '../../Models/PixMessageModel'
 import {
   ConnectionStreamService,
   connectionStreamServiceInstance,
@@ -12,7 +13,46 @@ class ConnectionStreamController {
     this.connectionStreamService = connectionStream
   }
 
-  execute(request: Request, response: Response): Response {
+  async longPolling(interationId: string, responseOne: boolean, ispb: string) {
+    let response: IPixMessage | IPixMessage[]
+    for (let i = 0; i < 8; i++) {
+      await new Promise((resolve, reject) =>
+        setTimeout(() => {
+          try {
+            const responseMessage =
+              this.connectionStreamService.executeDataCapture(
+                ispb,
+                responseOne,
+                interationId,
+              )
+            if (
+              !responseMessage?.message &&
+              !responseMessage?.messages?.length &&
+              i === 7
+            ) {
+              reject(new HttpError('No content', 204))
+            } else {
+              response = responseOne
+                ? responseMessage.message
+                : responseMessage.messages
+            }
+            resolve('')
+          } catch (error) {
+            if (error instanceof HttpError) {
+              reject(new HttpError(error.message, error.statusCode))
+            } else {
+              reject(error.message)
+            }
+          }
+        }, 1000),
+      )
+      if (response) {
+        return response
+      }
+    }
+  }
+
+  async execute(request: Request, response: Response): Promise<Response> {
     try {
       const { ispb, interationId } = request.params
       let responseOne = false
@@ -40,10 +80,11 @@ class ConnectionStreamController {
         'Pull-Next',
         `/api/pix/${ispb}/stream/${responseMessage?.interationId}`,
       )
-      console.log(response.getHeaders())
-      if (!responseMessage?.message && !responseMessage?.messages?.length)
-        return response.status(204).json({ message: 'No content' })
-      else
+      if (!responseMessage?.message && !responseMessage?.messages?.length) {
+        const data = await this.longPolling(interationId, responseOne, ispb)
+        return response.status(200).json({ ...data })
+        // response.status(204).json({ message: 'No content' })
+      } else
         return response
           .status(200)
           .json(

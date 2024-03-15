@@ -1,8 +1,4 @@
 import { Router } from 'express'
-import {
-  // ConnectionStreamController,
-  FindAllMessagesController,
-} from '../Controllers/PixMessageControllers'
 import connectionStreamController from '../Controllers/PixMessageControllers/ConnectionStreamController'
 import storeMessageController from '../Controllers/PixMessageControllers/StoreMessageController'
 import findAllMessagesController from '../Controllers/PixMessageControllers/FindAllMessages'
@@ -18,10 +14,11 @@ routes.get('/messages', (req, res) => {
   findAllMessagesController.execute(req, res)
 })
 
-routes.get('/api/pix/:ispb/stream/start', (req, res) =>
+routes.get('/api/pix/:ispb/stream/start', async (req, res) =>
   connectionStreamController.execute(req, res),
 )
-routes.get('/api/pix/:ispb/stream/:interationId', (req, res) =>
+
+routes.get('/api/pix/:ispb/stream/:interationId', async (req, res) =>
   connectionStreamController.execute(req, res),
 )
 
