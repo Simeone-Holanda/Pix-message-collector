@@ -51,4 +51,16 @@ describe('Server test', () => {
     expect(responseMessages.statusCode).toBe(200)
     expect(responseMessages.body.length).toEqual(15)
   })
+
+  it('should test disconnecting a stream', async () => {
+    const response = await request(app).delete(nextRequestUrl)
+    expect(response.body).toStrictEqual({})
+    expect(response.statusCode).toBe(200)
+    // tentando se conectar novamente.
+    const responseMessage = await request(app).get(nextRequestUrl)
+    expect(responseMessage.statusCode).toBe(404)
+    expect(responseMessage.body).toStrictEqual({
+      message: 'Interaction not found, check your connection',
+    })
+  })
 })
