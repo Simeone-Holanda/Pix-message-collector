@@ -2,6 +2,7 @@ import express, { Application } from 'express'
 import routes from './Routes'
 import helmet from 'helmet'
 import morgan from 'morgan'
+import './database'
 
 class App {
   public app: Application

@@ -10,9 +10,9 @@ class StoreMessageController {
     this.storeMessageService = storeMessage
   }
 
-  execute(request: Request, response: Response) {
+  async execute(request: Request, response: Response) {
     const { ispb, number } = request.params
-    this.storeMessageService.execute(ispb, number)
+    await this.storeMessageService.execute(ispb, number)
     return response
       .status(201)
       .json({ message: 'Mensagens PIX adicionadas com sucesso.' })

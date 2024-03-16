@@ -8,6 +8,7 @@ import {
   Default,
   PrimaryKey,
   Model,
+  BelongsTo,
 } from 'sequelize-typescript'
 import Person from './Person'
 // import { Person } from './Person'
@@ -34,6 +35,12 @@ class PixMessage extends Model<PixMessage> {
   @ForeignKey(() => Person)
   @Column({ type: DataTypes.UUID, allowNull: false })
   recebedorId!: string
+
+  @BelongsTo(() => Person)
+  pagador: Person
+
+  @BelongsTo(() => Person)
+  recebedor: Person
 
   @Column({ type: DataTypes.STRING(4), allowNull: false })
   campoLivre!: string

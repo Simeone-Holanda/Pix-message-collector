@@ -6,8 +6,8 @@ import stopConnectionController from '../Controllers/PixMessageControllers/StopC
 
 const routes = Router()
 
-routes.post('/api/util/msgs/:ispb/:number', (req, res) => {
-  storeMessageController.execute(req, res)
+routes.post('/api/util/msgs/:ispb/:number', async (req, res) => {
+  await storeMessageController.execute(req, res)
 })
 
 routes.get('/messages', (req, res) => {
