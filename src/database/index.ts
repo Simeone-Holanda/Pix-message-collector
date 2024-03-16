@@ -3,7 +3,7 @@ import Person from './models/Person'
 import PixMessage from './models/PixMessages'
 import Interaction from './models/Intereaction'
 // eslint-disable-next-line
-const dbConfig = require("../config/db");
+const dbConfig = require("../config/database");
 
 const sequelize = new Sequelize(dbConfig[process.env.NODE_ENV])
 
