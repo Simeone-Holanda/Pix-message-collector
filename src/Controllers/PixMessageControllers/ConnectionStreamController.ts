@@ -33,8 +33,6 @@ class ConnectionStreamController {
             ) {
               reject(new HttpError('No content', 204))
             } else {
-              console.log('responseMessage')
-              console.log(responseMessage)
               response = responseOne
                 ? responseMessage?.message?.get({ plain: true })
                 : responseMessage?.messages?.map((m) => m.get({ plain: true }))
