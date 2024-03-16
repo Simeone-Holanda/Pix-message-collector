@@ -1,5 +1,5 @@
 import HttpError from '../../Errors/httpError'
-import IPixMessage from '../../Models/PixMessageModel'
+import IPixMessage from '../../Interfaces/PixMessageModel'
 import {
   ConnectionStreamService,
   connectionStreamServiceInstance,

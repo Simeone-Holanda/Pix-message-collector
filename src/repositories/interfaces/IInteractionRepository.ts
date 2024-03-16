@@ -1,4 +1,4 @@
-import IInteraction from '../../Models/InteractionModel'
+import IInteraction from '../../Interfaces/InteractionModel'
 
 interface IInteractionRepository {
   save(interactionsId: IInteraction): void
