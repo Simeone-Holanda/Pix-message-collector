@@ -8,6 +8,6 @@ export interface IPixMessageRepository {
     limit?: number,
     sent?: boolean,
   ): Promise<PixMessage[]>
-  findOne(ispbRecebedor: string): IPixMessage
-  update(messageId: string, newPixMessage: object): IPixMessage
+  findOne(ispbRecebedor: string): Promise<PixMessage>
+  update(messageId: string, newPixMessage: object): Promise<void>
 }

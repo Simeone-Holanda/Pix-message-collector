@@ -5,6 +5,7 @@ import {
   connectionStreamServiceInstance,
 } from '../../Service/PixMessageServices/ConnectionStreamService'
 import { Response, Request } from 'express'
+import PixMessage from '../../database/models/PixMessages'
 
 class ConnectionStreamController {
   private readonly connectionStreamService: ConnectionStreamService
@@ -14,13 +15,13 @@ class ConnectionStreamController {
   }
 
   async longPolling(interationId: string, responseOne: boolean, ispb: string) {
-    let response: IPixMessage | IPixMessage[]
+    let response: PixMessage | PixMessage[]
     for (let i = 0; i < 8; i++) {
       await new Promise((resolve, reject) =>
-        setTimeout(() => {
+        setTimeout(async () => {
           try {
             const responseMessage =
-              this.connectionStreamService.executeDataCapture(
+              await this.connectionStreamService.executeDataCapture(
                 ispb,
                 responseOne,
                 interationId,
@@ -32,12 +33,15 @@ class ConnectionStreamController {
             ) {
               reject(new HttpError('No content', 204))
             } else {
+              console.log('responseMessage')
+              console.log(responseMessage)
               response = responseOne
-                ? responseMessage.message
-                : responseMessage.messages
+                ? responseMessage?.message?.get({ plain: true })
+                : responseMessage?.messages?.map((m) => m.get({ plain: true }))
             }
             resolve('')
           } catch (error) {
+            console.log(error)
             if (error instanceof HttpError) {
               reject(new HttpError(error.message, error.statusCode))
             } else {
@@ -69,12 +73,15 @@ class ConnectionStreamController {
         responseOne = true
       }
       const responseMessage = interationId
-        ? this.connectionStreamService.executeDataCapture(
+        ? await this.connectionStreamService.executeDataCapture(
             ispb,
             responseOne,
             interationId,
           )
-        : this.connectionStreamService.executeConnection(ispb, responseOne)
+        : await this.connectionStreamService.executeConnection(
+            ispb,
+            responseOne,
+          )
 
       response.setHeader(
         'Pull-Next',
@@ -82,6 +89,8 @@ class ConnectionStreamController {
       )
       if (!responseMessage?.message && !responseMessage?.messages?.length) {
         const data = await this.longPolling(interationId, responseOne, ispb)
+        console.log('data')
+        console.log(data)
         return response.status(200).json({ ...data })
         // response.status(204).json({ message: 'No content' })
       } else
@@ -91,6 +100,7 @@ class ConnectionStreamController {
             responseOne ? responseMessage.message : responseMessage.messages,
           )
     } catch (error) {
+      console.log(error)
       if (error instanceof HttpError) {
         return response.status(error.statusCode).send({
           message: error.message,

@@ -26,12 +26,16 @@ class ConnectionStreamService {
     }
   }
 
-  executeDataCapture(ispb: string, responseOne: boolean, interationId: string) {
+  async executeDataCapture(
+    ispb: string,
+    responseOne: boolean,
+    interationId: string,
+  ) {
     if (interationId) {
       this.checkInteraction(interationId)
     }
     if (responseOne) {
-      const message = this.pixMessageRepository.findOne(ispb)
+      const message = await this.pixMessageRepository.findOne(ispb)
 
       if (!message) {
         return {
@@ -39,10 +43,10 @@ class ConnectionStreamService {
           interationId,
         }
       }
-      this.pixMessageRepository.update(message.id, { sent: true })
+      await this.pixMessageRepository.update(message.id, { sent: true })
       return { message, interationId }
     } else {
-      const responseMessages = this.pixMessageRepository.findAll(
+      const responseMessages = await this.pixMessageRepository.findAll(
         ispb,
         10,
         false,
