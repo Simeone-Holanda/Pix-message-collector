@@ -1,24 +1,30 @@
-import IInteraction from '../../Models/InteractionModel'
+import IInteraction from '../../Interfaces/InteractionModel'
+import Interaction from '../../database/models/Intereaction'
 import IInteractionRepository from '../interfaces/IInteractionRepository'
 
 class InteractionRepository implements IInteractionRepository {
   interactions: IInteraction[] = []
-  save(interaction: IInteraction): void {
-    this.interactions.push(interaction)
+
+  async save(interaction: IInteraction) {
+    await Interaction.create({
+      ispb: interaction.ispb,
+    })
   }
 
-  count(): number {
-    return this.interactions.length
+  async count(): Promise<number> {
+    return await Interaction.count()
   }
 
-  findOne(interactionId: string): IInteraction {
-    return this.interactions.find((inte) => inte.id === interactionId)
+  async findOne(interactionId: string): Promise<Interaction> {
+    return await Interaction.findByPk(interactionId)
   }
 
-  delete(interactionId: string): void {
-    this.interactions = this.interactions.filter(
-      (inte) => inte.id !== interactionId,
-    )
+  async delete(interactionId: string): Promise<void> {
+    await Interaction.destroy({
+      where: {
+        id: interactionId,
+      },
+    })
   }
 }
 
