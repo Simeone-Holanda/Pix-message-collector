@@ -63,4 +63,5 @@ describe('Server test', () => {
       message: 'Interaction not found, check your connection',
     })
   })
+
 })
