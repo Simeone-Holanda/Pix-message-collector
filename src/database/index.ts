@@ -11,4 +11,9 @@ const models = [Person, PixMessage, Interaction]
 
 sequelize.addModels(models)
 
+async function resetDataBase() {
+  await sequelize.drop()
+  await sequelize.sync()
+}
+resetDataBase()
 export default sequelize
