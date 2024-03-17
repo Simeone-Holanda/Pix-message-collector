@@ -10,20 +10,23 @@ routes.post('/api/util/msgs/:ispb/:number', async (req, res) => {
   await storeMessageController.execute(req, res)
 })
 
-routes.get('/messages', (req, res) => {
-  findAllMessagesController.execute(req, res)
+routes.get('/messages', async (req, res) => {
+  await findAllMessagesController.execute(req, res)
 })
 
-routes.get('/api/pix/:ispb/stream/start', async (req, res) =>
-  connectionStreamController.execute(req, res),
+routes.get(
+  '/api/pix/:ispb/stream/start',
+  async (req, res) => await connectionStreamController.execute(req, res),
 )
 
-routes.get('/api/pix/:ispb/stream/:interationId', async (req, res) =>
-  connectionStreamController.execute(req, res),
+routes.get(
+  '/api/pix/:ispb/stream/:interationId',
+  async (req, res) => await connectionStreamController.execute(req, res),
 )
 
-routes.delete('/api/pix/:ispb/stream/:interationId', (req, res) =>
-  stopConnectionController.execute(req, res),
+routes.delete(
+  '/api/pix/:ispb/stream/:interationId',
+  async (req, res) => await stopConnectionController.execute(req, res),
 )
 
 export default routes

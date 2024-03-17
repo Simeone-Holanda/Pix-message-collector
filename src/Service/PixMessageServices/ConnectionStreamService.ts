@@ -19,8 +19,9 @@ class ConnectionStreamService {
     this.interactionRepository = interactionRepository
   }
 
-  checkInteraction(interactionId: string) {
-    const hasInteraction = this.interactionRepository.findOne(interactionId)
+  async checkInteraction(interactionId: string) {
+    const hasInteraction =
+      await this.interactionRepository.findOne(interactionId)
     if (!hasInteraction) {
       throw new HttpError('Interaction not found, check your connection', 404)
     }
@@ -32,7 +33,7 @@ class ConnectionStreamService {
     interationId: string,
   ) {
     if (interationId) {
-      this.checkInteraction(interationId)
+      await this.checkInteraction(interationId)
     }
     if (responseOne) {
       const message = await this.pixMessageRepository.findOne(ispb)
@@ -67,17 +68,16 @@ class ConnectionStreamService {
     }
   }
 
-  executeConnection(ispb: string, responseOne: boolean) {
-    const interationId = uuidv4().slice(0, 15)
+  async executeConnection(ispb: string, responseOne: boolean) {
     // verificando é possível se conectar
-    if (this.interactionRepository.count() > 6)
+    const countInteraction = await this.interactionRepository.count()
+    if (countInteraction > 6)
       throw new HttpError('The maximum stream limit has been exceeded. ', 429)
 
-    this.interactionRepository.save({
-      id: interationId,
+    const interaction = await this.interactionRepository.save({
       ispb,
     })
-    return this.executeDataCapture(ispb, responseOne, interationId)
+    return this.executeDataCapture(ispb, responseOne, interaction.id)
   }
 }
 

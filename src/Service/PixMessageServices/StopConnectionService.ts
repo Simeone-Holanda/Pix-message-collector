@@ -9,11 +9,11 @@ class StopConnectionService {
     this.interactionRepository = interactionRepository
   }
 
-  execute(interactionId: string, ispb: string): void {
-    const interaction = this.interactionRepository.findOne(interactionId)
+  async execute(interactionId: string, ispb: string) {
+    const interaction = await this.interactionRepository.findOne(interactionId)
     if (!interaction || interaction?.ispb !== ispb)
       throw new HttpError('interactionId and ispb not found', 404)
-    this.interactionRepository.delete(interaction.id)
+    await this.interactionRepository.delete(interaction.id)
   }
 }
 

@@ -1,5 +1,4 @@
 import HttpError from '../../Errors/httpError'
-import IPixMessage from '../../Interfaces/PixMessageModel'
 import {
   ConnectionStreamService,
   connectionStreamServiceInstance,
@@ -39,7 +38,6 @@ class ConnectionStreamController {
             }
             resolve('')
           } catch (error) {
-            console.log(error)
             if (error instanceof HttpError) {
               reject(new HttpError(error.message, error.statusCode))
             } else {
@@ -87,8 +85,6 @@ class ConnectionStreamController {
       )
       if (!responseMessage?.message && !responseMessage?.messages?.length) {
         const data = await this.longPolling(interationId, responseOne, ispb)
-        console.log('data')
-        console.log(data)
         return response.status(200).json({ ...data })
         // response.status(204).json({ message: 'No content' })
       } else
@@ -98,7 +94,6 @@ class ConnectionStreamController {
             responseOne ? responseMessage.message : responseMessage.messages,
           )
     } catch (error) {
-      console.log(error)
       if (error instanceof HttpError) {
         return response.status(error.statusCode).send({
           message: error.message,

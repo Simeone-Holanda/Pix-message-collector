@@ -3,10 +3,8 @@ import Interaction from '../../database/models/Intereaction'
 import IInteractionRepository from '../interfaces/IInteractionRepository'
 
 class InteractionRepository implements IInteractionRepository {
-  interactions: IInteraction[] = []
-
-  async save(interaction: IInteraction) {
-    await Interaction.create({
+  async save(interaction: IInteraction): Promise<Interaction> {
+    return await Interaction.create({
       ispb: interaction.ispb,
     })
   }

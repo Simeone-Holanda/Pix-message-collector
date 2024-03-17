@@ -1,4 +1,3 @@
-import HttpError from '../../Errors/httpError'
 import IPixMessage from '../../Interfaces/PixMessageModel'
 import Person from '../../database/models/Person'
 import PixMessage from '../../database/models/PixMessages'
@@ -6,8 +5,6 @@ import PixMessage from '../../database/models/PixMessages'
 import { IPixMessageRepository } from '../interfaces/IPixMessage'
 
 export class PixMessageRepository implements IPixMessageRepository {
-  pixMessages: IPixMessage[] = []
-
   async save(pixMessage: IPixMessage): Promise<PixMessage> {
     const message = await PixMessage.create({
       sent: false,
@@ -28,7 +25,11 @@ export class PixMessageRepository implements IPixMessageRepository {
     sent?: boolean,
   ): Promise<PixMessage[]> {
     if (!ispbRecebedor && !limit && !sent) {
-      return await PixMessage.findAll()
+      return await PixMessage.findAll({
+        where: {
+          sent: false,
+        },
+      })
     } else if (ispbRecebedor && sent != null) {
       return await PixMessage.findAll({
         where: {
@@ -37,6 +38,7 @@ export class PixMessageRepository implements IPixMessageRepository {
         include: [
           {
             model: Person,
+            as: 'recebedor',
             where: { ispb: ispbRecebedor },
             required: false,
           },
@@ -51,7 +53,6 @@ export class PixMessageRepository implements IPixMessageRepository {
         include: [
           {
             model: Person,
-            as: 'recebedor',
             where: { ispb: ispbRecebedor },
             required: false,
           },

@@ -11,9 +11,11 @@ class FindAllMessagesController {
     this.findAllMessageServices = findAllMessage
   }
 
-  execute(request: Request, response: Response): Response {
+  async execute(request: Request, response: Response): Promise<Response> {
     try {
-      return response.status(200).json(this.findAllMessageServices.execute())
+      return response
+        .status(200)
+        .json(await this.findAllMessageServices.execute())
     } catch (error) {
       return response.status(500).json({
         message:

@@ -1,5 +1,5 @@
 interface IInteraction {
-  id: string
+  id?: string
   ispb: string
 }
 

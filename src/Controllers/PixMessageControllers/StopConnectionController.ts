@@ -12,10 +12,10 @@ class StopConnectionController {
     this.stopConnectionService = stopConnectionService
   }
 
-  execute(request: Request, response: Response): Response {
+  async execute(request: Request, response: Response): Promise<Response> {
     try {
       const { ispb, interationId } = request.params
-      this.stopConnectionService.execute(interationId, ispb)
+      await this.stopConnectionService.execute(interationId, ispb)
       return response.status(200).json({})
     } catch (error) {
       console.log(error)
