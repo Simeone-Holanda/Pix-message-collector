@@ -11,6 +11,7 @@ class StoreMessageController {
   }
 
   async execute(request: Request, response: Response) {
+    console.log('adicionando mensagens')
     const { ispb, number } = request.params
     await this.storeMessageService.execute(ispb, number)
     return response

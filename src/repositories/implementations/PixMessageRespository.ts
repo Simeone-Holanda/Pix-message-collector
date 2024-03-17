@@ -5,6 +5,8 @@ import PixMessage from '../../database/models/PixMessages'
 import { IPixMessageRepository } from '../interfaces/IPixMessage'
 
 export class PixMessageRepository implements IPixMessageRepository {
+  cacheMessage = []
+
   async save(pixMessage: IPixMessage): Promise<PixMessage> {
     const message = await PixMessage.create({
       sent: false,

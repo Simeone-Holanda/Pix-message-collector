@@ -37,14 +37,20 @@ class ConnectionStreamService {
     }
     if (responseOne) {
       const message = await this.pixMessageRepository.findOne(ispb)
-
-      if (!message) {
+      if (
+        !message ||
+        (message?.id &&
+          this.pixMessageRepository.cacheMessage.includes(message?.id))
+      ) {
         return {
           message: null,
           interationId,
         }
       }
+      this.pixMessageRepository.cacheMessage.push(message.id)
       await this.pixMessageRepository.update(message.id, { sent: true })
+      this.pixMessageRepository.cacheMessage =
+        this.pixMessageRepository.cacheMessage.filter((cm) => cm !== message.id)
       return { message, interationId }
     } else {
       const responseMessages = await this.pixMessageRepository.findAll(

@@ -2,6 +2,7 @@ import IPixMessage from '../../Interfaces/PixMessageModel'
 import PixMessage from '../../database/models/PixMessages'
 
 export interface IPixMessageRepository {
+  cacheMessage: string[]
   save(pixMessage: IPixMessage): Promise<PixMessage>
   findAll(
     ispbRecebedor?: string,
