@@ -25,7 +25,7 @@ routes.get(
 )
 
 routes.delete(
-  '/api/pix/:ispb/stream/:interationId',
+  '/api/pix/:ispb/stream/stop/:interationId',
   async (req, res) => await stopConnectionController.execute(req, res),
 )
 

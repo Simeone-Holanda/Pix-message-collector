@@ -53,7 +53,13 @@ describe('Server test', () => {
   })
 
   it('should test disconnecting a stream', async () => {
-    const response = await request(app).delete(nextRequestUrl)
+    // /api/pix/:ispb/stream/stop/:interationId
+    const route = nextRequestUrl.split('stream/')
+    console.log(nextRequestUrl)
+    console.log(route[0] + 'stop/stream/' + route[1])
+    const response = await request(app).delete(
+      route[0] + 'stream/stop/' + route[1],
+    )
     expect(response.body).toStrictEqual({})
     expect(response.statusCode).toBe(200)
     // tentando se conectar novamente.
