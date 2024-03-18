@@ -1,0 +1,194 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "API - PIX MESSAGE COLLECTOR",
+    "description": "The pix message collector is based on the implementation of the Central Bank's SPI (Instant Payment System) Communication Interface to provide support for Pix."
+  },
+  "basePath": "/",
+  "components": {
+    "responses": {
+      "200": {
+        "description": "Return message. "
+      },
+      "201": {
+        "description": "Return message. "
+      },
+      "204": {
+        "description": "No Content. "
+      },
+      "404": {
+        "description": "Not found. "
+      },
+      "429": {
+        "description": "Too Many Requests. "
+      },      
+      "500": {
+        "description": "Internal Server Error. "
+      }
+    }
+  },
+  "paths": {
+    "/api/util/msgs/{ispb}/{number}": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ispb",
+            "required": true,
+            "default": "32074986",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "number",
+            "required": true,
+            "default": "5",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201"
+          },
+          "400": {
+            "$ref": "#/components/responses/201"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/messages": {
+      "get": {
+        "tags": [
+          "Messages"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          }
+        }
+      }
+    },
+    "/api/pix/{ispb}/stream/start": {
+      "get": {
+        "tags": [
+          "Messages"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ispb",
+            "required": true,
+            "default": "32074986",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "204": {
+            "$ref": "#/components/responses/200"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/pix/{ispb}/stream/{interationId}": {
+      "get": {
+        "tags": [
+          "Messages"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ispb",
+            "required": true,
+            "default": "32074986",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "interationId",
+            "required": true,
+            "default": "asdhoaihjsodjóaisjd",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/pix/{ispb}/stream/stop/{interationId}": {
+      "delete": {
+        "tags": [
+          "Messages"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ispb",
+            "required": true,
+            "default": "32074986",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "interationId",
+            "required": true,
+            "default": "asdhoaihjsodjóaisjd",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    }
+   }
+}

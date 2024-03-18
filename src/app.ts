@@ -2,6 +2,8 @@ import express, { Application } from 'express'
 import routes from './Routes'
 import helmet from 'helmet'
 import morgan from 'morgan'
+import swaggerUi from 'swagger-ui-express'
+import swaggerFile from './swagger.json'
 import './database'
 
 class App {
@@ -19,6 +21,7 @@ class App {
   }
 
   routes() {
+    this.app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
     this.app.use(routes)
   }
 
