@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
 import HttpError from '../../Errors/httpError'
 import { IPixMessageRepository } from '../../repositories/interfaces/IPixMessage'
 import IInteractionRepository from '../../repositories/interfaces/IInteractionRepository'
