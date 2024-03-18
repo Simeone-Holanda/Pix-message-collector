@@ -22,6 +22,7 @@ This application is built to operate on [Node.js](https://nodejs.org/en) version
 2 - Rename the .env.example file to .env and configure it <br><br>
 3 - Development database configuration
 <pre>
+  npm run build
   npx sequelize-cli db:create
   npx sequelize-cli db:migrate
 </pre>
