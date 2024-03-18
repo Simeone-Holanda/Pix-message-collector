@@ -7,9 +7,10 @@ import {
   DataType,
   Default,
   PrimaryKey,
+  HasMany,
 } from 'sequelize-typescript'
+import PixMessage from './PixMessages'
 
-// Defina o modelo para a tabela Persons
 @Table({ tableName: 'Persons' })
 // eslint-disable-next-line no-use-before-define
 class Person extends Model<Person> {
@@ -42,6 +43,12 @@ class Person extends Model<Person> {
 
   @Column({ type: DataTypes.DATE, allowNull: false })
   updatedAt!: Date
+
+  @HasMany(() => PixMessage, 'pagadorId')
+  pagador: PixMessage[]
+
+  @HasMany(() => PixMessage, 'recebedorId')
+  recebedor: PixMessage[]
 }
 
 export default Person

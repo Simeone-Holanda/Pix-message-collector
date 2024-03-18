@@ -5,6 +5,7 @@ import {
 } from '../../Service/PixMessageServices/ConnectionStreamService'
 import { Response, Request } from 'express'
 import PixMessage from '../../database/models/PixMessages'
+import { error } from 'console'
 
 class ConnectionStreamController {
   private readonly connectionStreamService: ConnectionStreamService
@@ -96,6 +97,8 @@ class ConnectionStreamController {
             responseOne ? responseMessage.message : responseMessage.messages,
           )
     } catch (error) {
+      console.log('error')
+      console.log(error)
       if (error instanceof HttpError) {
         return response.status(error.statusCode).send({
           message: error.message,

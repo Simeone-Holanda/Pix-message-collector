@@ -26,70 +26,48 @@ export class PixMessageRepository implements IPixMessageRepository {
     limit?: number,
     sent?: boolean,
   ): Promise<PixMessage[]> {
-    if (!ispbRecebedor && !limit && !sent) {
-      return await PixMessage.findAll({
-        where: {
-          sent: false,
-        },
-      })
-    } else if (ispbRecebedor && sent != null) {
-      return await PixMessage.findAll({
-        where: {
-          sent: false,
-        },
-        include: [
-          {
-            model: Person,
-            as: 'recebedor',
-            where: { ispb: ispbRecebedor },
-            required: false,
-          },
-        ],
-        limit,
-      })
-    } else {
-      return await PixMessage.findAll({
-        where: {
-          sent: false,
-        },
-        include: [
-          {
-            model: Person,
-            where: { ispb: ispbRecebedor },
-            required: false,
-          },
-        ],
-        limit,
-      })
-    }
-  }
-
-  async findOne(ispbRecebedor: string, sent?: boolean): Promise<PixMessage> {
-    if (sent !== null)
-      return await PixMessage.findOne({
-        where: {
-          sent: false,
-        },
-        include: [
-          {
-            model: Person,
-            as: 'recebedor',
-            where: { ispb: ispbRecebedor },
-            required: false,
-          },
-        ],
-      })
-    return await PixMessage.findOne({
+    const messages = await PixMessage.findAll({
       where: {
         sent: false,
       },
       include: [
         {
           model: Person,
-          where: { ispb: ispbRecebedor },
-          required: false,
+          as: 'recebedor',
         },
       ],
+      limit,
+    })
+    if (!ispbRecebedor && !limit && !sent) {
+      return await PixMessage.findAll({})
+    } else {
+      return messages.filter((mensagem) => {
+        if (mensagem.recebedor.ispb === ispbRecebedor) {
+          return true
+        }
+        return false
+      })
+    }
+  }
+
+  async findOne(ispbRecebedor: string): Promise<PixMessage> {
+    const messages = await PixMessage.findAll({
+      where: {
+        sent: false,
+      },
+      include: [
+        {
+          model: Person,
+          as: 'recebedor',
+        },
+      ],
+      limit: 10,
+    })
+    return messages.find((mensagem) => {
+      if (mensagem.recebedor.ispb === ispbRecebedor) {
+        return true
+      }
+      return false
     })
   }
 

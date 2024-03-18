@@ -7,11 +7,10 @@ import {
   DataType,
   Default,
   PrimaryKey,
-  Model,
+  Model, 
   BelongsTo,
 } from 'sequelize-typescript'
 import Person from './Person'
-// import { Person } from './Person'
 
 @Table({ tableName: 'Pixmessages' })
 // eslint-disable-next-line no-use-before-define
@@ -36,10 +35,10 @@ class PixMessage extends Model<PixMessage> {
   @Column({ type: DataTypes.UUID, allowNull: false })
   recebedorId!: string
 
-  @BelongsTo(() => Person)
+  @BelongsTo(() => Person, 'pagadorId')
   pagador: Person
 
-  @BelongsTo(() => Person)
+  @BelongsTo(() => Person, 'recebedorId')
   recebedor: Person
 
   @Column({ type: DataTypes.STRING(4), allowNull: false })
