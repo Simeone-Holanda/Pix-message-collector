@@ -76,7 +76,7 @@ class ConnectionStreamService {
   async executeConnection(ispb: string, responseOne: boolean) {
     // verificando é possível se conectar
     const countInteraction = await this.interactionRepository.count()
-    if (countInteraction > 6)
+    if (countInteraction > 5)
       throw new HttpError('The maximum stream limit has been exceeded. ', 429)
 
     const interaction = await this.interactionRepository.save({
