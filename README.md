@@ -8,10 +8,11 @@
 * Express
 * Eslint
 * Prettier
+* Sequelize(Mysql)
 
 ## ⚙️ Installation
 
-This application is built to operate on [Node.js](https://nodejs.org/en) version 18.16 and utilizes NPM as its package manager.
+This application is built to operate on [Node.js](https://nodejs.org/en) version 18.16 and utilizes NPM as its package manager. For database you need to have a connection to [MYSQL](https://www.mysql.com/products/workbench/) 
 
 1 - Clone the repository and install dependencies:
 <pre>
@@ -38,6 +39,10 @@ This application is built to operate on [Node.js](https://nodejs.org/en) version
 6 – Para executar o todos os testes de integração:
 <pre>
   npm run test
+</pre>
+7 – Acompanhe o swagger interativo em:
+<pre>
+  http://localhost:3000/doc/
 </pre>
 
 ## 🛠️Features

@@ -64,7 +64,9 @@ class ConnectionStreamController {
       }
       if (
         !request.headers.accept ||
-        request.headers.accept === 'application/json'
+        request.headers.accept === 'application/json' ||
+        (request.headers.accept !== 'application/json' &&
+          request.headers.accept !== 'multipart/json')
       ) {
         responseOne = true
       }
